@@ -5,3 +5,8 @@ Modules de l'application
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: app.fastapi_env.main
+   :members:
+   :undoc-members:
+   :show-inheritance:

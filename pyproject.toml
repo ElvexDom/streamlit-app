@@ -4,7 +4,12 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "dotenv>=0.9.9",
+    "fastapi>=0.135.1",
+    "httpx>=0.28.1",
+    "uvicorn>=0.41.0",
+]
 
 [dependency-groups]
 dev = [
@@ -34,8 +39,13 @@ ignore = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
-addopts = "-v --cov=src --cov-report=term-missing --cov-report=xml"
+addopts = "-v --cov=app --cov-report=term-missing --cov-report=xml"
 
 [tool.coverage.run]
 relative_files = true
 source = ["src"]
+
+[tool.uv.workspace]
+members = [
+    "app/fastapi_env",
+]
