@@ -2,11 +2,13 @@
 
 [Full report](https://htmlpreview.github.io/?https://github.com/ElvexDom/streamlit-app/blob/coverage-data/htmlcov/index.html)
 
-| Name                |    Stmts |     Miss |   Cover |   Missing |
-|-------------------- | -------: | -------: | ------: | --------: |
-| app/\_\_init\_\_.py |        0 |        0 |    100% |           |
-| app/main.py         |        4 |        1 |     75% |         7 |
-| **TOTAL**           |    **4** |    **1** | **75%** |           |
+| Name                             |    Stmts |     Miss |   Cover |   Missing |
+|--------------------------------- | -------: | -------: | ------: | --------: |
+| app/\_\_init\_\_.py              |        0 |        0 |    100% |           |
+| app/fastapi\_env/\_\_init\_\_.py |        0 |        0 |    100% |           |
+| app/fastapi\_env/main.py         |       19 |        1 |     95% |        19 |
+| app/main.py                      |        4 |        1 |     75% |         7 |
+| **TOTAL**                        |   **23** |    **2** | **91%** |           |
 
 
 ## Setup coverage badge
