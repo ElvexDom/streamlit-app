@@ -1,0 +1,52 @@
+name: CI Quality Check
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.12
+
+      - name: Lint with Ruff
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Run Tests with Pytest
+        # On génère le fichier .coverage standard (binaire) ET le XML pour être sûr
+        run: uv run pytest --cov=app --cov-report=xml
+        env:
+          # IMPORTANT : On force les chemins relatifs pour que l'action Docker puisse lire le fichier
+          COVERAGE_RUN_RELATIVE_FILES: True
+
+      - name: Coverage comment
+        id: coverage_comment
+        uses: py-cov-action/python-coverage-comment-action@v3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERAGE_DATA_BRANCH: coverage-data
+
+      - name: Store Pull Request comment
+        uses: actions/upload-artifact@v4
+        if: steps.coverage_comment.outputs.COMMENT_FILE_WRITTEN == 'true'
+        with:
+          name: python-coverage-comment-action
+          path: python-coverage-comment-action.txt
