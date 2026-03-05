@@ -8,9 +8,9 @@ import sys
 
 sys.path.insert(0, os.path.abspath("../../"))
 
-project = 'streamlit-app'
-copyright = '2026, lvx'
-author = 'lvx'
+project = "streamlit-app"
+copyright = "2026, lvx"
+author = "lvx"
 
 extensions = [
     "sphinx_rtd_theme",
@@ -20,7 +20,7 @@ extensions = [
     "sphinx.ext.viewcode",  # Pour afficher code source
     "myst_parser",  # Pour le markdown
     "sphinx_copybutton",  # Pour ajouter un bouton de copie
-    "sphinxcontrib.mermaid", # Pour générer les schémas Mermaid
+    "sphinxcontrib.mermaid",  # Pour générer les schémas Mermaid
 ]
 
 templates_path = ["_templates"]
