@@ -1,5 +1,9 @@
 # Projet Micro-services, Sécurité et Livraison Continue
 
+![CI Status](https://github.com/ElvexDom/streamlit-app/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://raw.githubusercontent.com/ElvexDom/streamlit-app/coverage-data/badge.svg)
+![License](https://img.shields.io/github/license/ElvexDom/streamlit-app)
+
 ## Description
 
 Ce dépôt présente un **exemple d'architecture applicative conteneurisée** mettant en œuvre plusieurs bonnes pratiques modernes de développement logiciel :
