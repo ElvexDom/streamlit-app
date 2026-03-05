@@ -52,7 +52,13 @@ jobs:
           name: python-coverage-comment-action
           path: python-coverage-comment-action.txt
 
-      # --- ÉTAPE SPHINX AJOUTÉE ICI ---
+      # --- RÉPARATION DES PERMISSIONS ---
+      # L'action de coverage s'exécute en Docker et peut verrouiller les dossiers. 
+      # On redonne la propriété au runner avant Sphinx.
+      - name: Fix permissions
+        run: sudo chown -R $USER:$USER .
+
+      # --- GÉNÉRATION DE LA DOCUMENTATION ---
       - name: Build Sphinx Documentation
         run: uv run sphinx-build -b html docs/source docs/build/html
 
