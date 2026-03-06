@@ -2,13 +2,20 @@
 
 [Full report](https://htmlpreview.github.io/?https://github.com/ElvexDom/streamlit-app/blob/coverage-data/htmlcov/index.html)
 
-| Name                             |    Stmts |     Miss |   Cover |   Missing |
-|--------------------------------- | -------: | -------: | ------: | --------: |
-| app/\_\_init\_\_.py              |        0 |        0 |    100% |           |
-| app/fastapi\_env/\_\_init\_\_.py |        0 |        0 |    100% |           |
-| app/fastapi\_env/main.py         |       19 |        1 |     95% |        19 |
-| app/main.py                      |        4 |        1 |     75% |         7 |
-| **TOTAL**                        |   **23** |    **2** | **91%** |           |
+| Name                                     |    Stmts |     Miss |    Cover |   Missing |
+|----------------------------------------- | -------: | -------: | -------: | --------: |
+| app/\_\_init\_\_.py                      |        0 |        0 |     100% |           |
+| app/fastapi\_env/\_\_init\_\_.py         |        0 |        0 |     100% |           |
+| app/fastapi\_env/main.py                 |       33 |        0 |     100% |           |
+| app/fastapi\_env/maths/\_\_init\_\_.py   |        0 |        0 |     100% |           |
+| app/fastapi\_env/maths/mon\_module.py    |       10 |        0 |     100% |           |
+| app/fastapi\_env/models/\_\_init\_\_.py  |        0 |        0 |     100% |           |
+| app/fastapi\_env/models/models.py        |        4 |        0 |     100% |           |
+| app/fastapi\_env/modules/\_\_init\_\_.py |        0 |        0 |     100% |           |
+| app/fastapi\_env/modules/connect.py      |       18 |        0 |     100% |           |
+| app/fastapi\_env/modules/crud.py         |       11 |        0 |     100% |           |
+| app/main.py                              |        3 |        0 |     100% |           |
+| **TOTAL**                                |   **79** |    **0** | **100%** |           |
 
 
 ## Setup coverage badge
