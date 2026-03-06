@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 # Modèle pour la réception des données via POST /data
@@ -20,7 +20,4 @@ class DataResponse(BaseModel):
     operation: str
     resultat: float
 
-    class Config:
-        """Configuration pour permettre la compatibilité avec SQLAlchemy."""
-
-        from_attributes = True  # Indispensable pour lire les objets SQLAlchemy
+    model_config = ConfigDict(from_attributes=True)
