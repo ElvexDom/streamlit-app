@@ -1,44 +1,60 @@
-import pytest
 from fastapi.testclient import TestClient
 
-from app.fastapi_env.main import (  # On importe 'storage' pour pouvoir le manipuler
-    app,
-    storage,
-)
+from app.fastapi_env.main import app
 
 client = TestClient(app)
 
 
-@pytest.fixture(autouse=True)
-def clean_storage():
-    """Cette fixture vide la liste storage pour garantir l'isolation des tests."""
-    storage.clear()
-    yield  # Le test s'exécute ici
-    # Optionnel : on pourrait rajouter du code de nettoyage après le test ici
-
-
-def test_get_data_empty():
-    """Vérifie que la liste est bien vide au démarrage grâce à la fixture."""
+def test_get_data_structure():
+    """Vérifie que la route GET renvoie bien une liste (même vide)."""
     response = client.get("/data")
     assert response.status_code == 200
-    assert response.json() == {"data": []}
+    assert isinstance(response.json(), list)
 
 
-def test_post_and_get_data():
-    """Vérifie l'enchaînement complet : POST puis GET."""
-    # 1. POST
-    payload = {"key": "temp", "value": "25"}
-    client.post("/data", json=payload)
+def test_post_operations_success():
+    """Vérifie que le POST traite correctement toutes les opérations supportées."""
+    # Test ADD (Ligne 36)
+    payload_add = {"valeur_a": 10, "valeur_b": 20, "operation": "add"}
+    res_add = client.post("/data", json=payload_add)
+    assert res_add.status_code == 200
+    assert res_add.json()["resultat"] == 30.0
 
-    # 2. GET
-    response = client.get("/data")
-    assert len(response.json()["data"]) == 1
-    assert response.json()["data"][0]["key"] == "temp"
+    # Test SUB (Ligne 38)
+    payload_sub = {"valeur_a": 10, "valeur_b": 5, "operation": "sub"}
+    res_sub = client.post("/data", json=payload_sub)
+    assert res_sub.json()["resultat"] == 5.0
+
+    # Test MULTIPLY (Ligne 40)
+    payload_mul = {"valeur_a": 3, "valeur_b": 4, "operation": "multiply"}
+    res_mul = client.post("/data", json=payload_mul)
+    assert res_mul.json()["resultat"] == 12.0
+
+    # Test DIVIDE (Ligne 42)
+    payload_div = {"valeur_a": 10, "valeur_b": 2, "operation": "divide"}
+    res_div = client.post("/data", json=payload_div)
+    assert res_div.json()["resultat"] == 5.0
 
 
-def test_post_invalid_data():
-    """Vérifie que FastAPI rejette les données mal formées (Mock de validation)."""
-    # On envoie 'val' au lieu de 'value' (le modèle attend 'value')
-    payload = {"key": "erreur", "val": "10"}
+def test_post_invalid_operation():
+    """Vérifie la gestion d'une opération non supportée (Erreur 400, Lignes 52-54)."""
+    payload = {"valeur_a": 10, "valeur_b": 5, "operation": "modulo"}
+    response = client.post("/data", json=payload)
+    assert response.status_code == 400
+    assert response.json()["detail"] == "Opération non supportée"
+
+
+def test_post_division_by_zero():
+    """Vérifie la capture de ValueError via l'exception HTTP."""
+    payload = {"valeur_a": 10, "valeur_b": 0, "operation": "divide"}
+    response = client.post("/data", json=payload)
+    assert response.status_code == 400
+    # On vérifie que le message d'erreur vient bien de ton module mathématique
+    assert "Division par zéro" in response.json()["detail"]
+
+
+def test_post_bad_schema():
+    """Vérifie que FastAPI rejette un JSON incomplet (Erreur 422)."""
+    payload = {"valeur_a": 10}
     response = client.post("/data", json=payload)
     assert response.status_code == 422
