@@ -6,40 +6,37 @@ import sys
 
 
 def run_server():
-    """Lance réellement le serveur Uvicorn."""
-    # On utilise l'importation par chaîne pour éviter les problèmes de cycle
-    # 'app.fastapi_env.api:app' pointe vers ton fichier de logique
+    """Lancer le serveur Uvicorn avec configuration par environnement."""
+    # Récupération du port via variable d'environnement
+    port = os.getenv("FASTAPI_PORT", "8000")
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    print("Démarrage du serveur FastAPI sur http://0.0.0.0:8000")
+    print(f"Démarrage du serveur FastAPI sur http://0.0.0.0:{port}")
+
     subprocess.run(
         [
             sys.executable,
             "-m",
             "uvicorn",
-            "api:app",  # On cible api.py (qui est dans le même dossier)
+            "api:app",
             "--host",
             "0.0.0.0",
             "--port",
-            "8000",
-            "--reload",
+            port,
         ],
-        cwd=current_dir,  # Indispensable pour que 'api:app' soit trouvé
+        cwd=current_dir,
     )
 
 
 def main():
-    """Point d'entrée : lance Uvicorn ou valide le chargement pour les tests."""
+    """Déterminer s'il faut lancer le serveur ou valider le test."""
     # Sécurité pour Pytest : on ne lance pas le serveur bloquant
     if "PYTEST_CURRENT_TEST" in os.environ:
-        # On peut simplement simuler un succès de chargement
         print("Mode Test détecté : chargement de __main__.py validé.")
         return
 
-    # Lancement réel du serveur (exclu du coverage car bloquant/infini)
-    # pragma: no cover
-    if __name__ == "__main__":
-        run_server()
+    # Lancement réel du serveur
+    run_server()
 
 
 if __name__ == "__main__":
