@@ -1,24 +1,36 @@
 import runpy
+import subprocess
 import sys
 
 
-def test_app_main_with_monkeypatch(monkeypatch):
-    """Teste le lancement du module app en capturant les commandes sans MagicMock."""
-    # 1. On crée une liste pour stocker les commandes interceptées
-    captured_commands = []
+def test_main_full_coverage_with_runpy(monkeypatch):
+    """Exécute le main via runpy en simulant Windows et Linux (Full Coverage)."""
+    # On définit les collecteurs
+    captured_popens = []
 
-    # 2. On définit une fonction factice qui remplace subprocess.Popen
-    def mock_popen(args, **kwargs):
-        captured_commands.append(args)
-        return None  # On simule que le processus est lancé
+    # Mocks globaux
+    monkeypatch.setattr("dotenv.load_dotenv", lambda: None)
+    monkeypatch.setattr(
+        subprocess, "Popen", lambda args, **kwargs: captured_popens.append(args)
+    )
+    # Mock de subprocess.run pour ne rien exécuter réellement
+    monkeypatch.setattr(subprocess, "run", lambda *args, **kwargs: None)
 
-    # 3. On applique le remplacement
-    monkeypatch.setattr("subprocess.Popen", mock_popen)
+    # Configuration des ports
+    monkeypatch.setenv("FASTAPI_PORT", "8000")
+    monkeypatch.setenv("STREAMLIT_PORT", "8501")
 
-    # 4. On exécute le module app (__main__.py)
+    # --- Couverture de la branche Windows ---
+    monkeypatch.setattr(sys, "platform", "win32")
     runpy.run_module("app", run_name="__main__")
 
-    # 5. Vérifications
-    assert len(captured_commands) == 2
-    assert [sys.executable, "-m", "app.fastapi_env"] in captured_commands
-    assert [sys.executable, "-m", "app.streamlit_env"] in captured_commands
+    # --- Couverture de la branche Unix (Linux/Mac) ---
+    # On vide la liste pour repartir propre
+    captured_popens.clear()
+    monkeypatch.setattr(sys, "platform", "linux")
+    runpy.run_module("app", run_name="__main__")
+
+    # Vérifications finales
+    assert len(captured_popens) == 2
+    assert [sys.executable, "-m", "app.fastapi_env"] in captured_popens
+    assert [sys.executable, "-m", "app.streamlit_env"] in captured_popens
