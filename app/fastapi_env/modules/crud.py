@@ -1,6 +1,5 @@
+from models.models import DataInput
 from sqlalchemy.orm import Session
-
-from app.fastapi_env.models.models import DataInput
 
 from .connect import OperationResult
 

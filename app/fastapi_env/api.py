@@ -1,10 +1,9 @@
 from fastapi import Depends, FastAPI
+from maths import mon_module
+from models.models import DataInput, DataResponse
+from modules import crud
+from modules.connect import SessionLocal, init_db
 from sqlalchemy.orm import Session
-
-from app.fastapi_env.maths import mon_module
-from app.fastapi_env.models.models import DataInput, DataResponse
-from app.fastapi_env.modules import crud
-from app.fastapi_env.modules.connect import SessionLocal, init_db
 
 # Initialise la DB (utile pour SQLite local)
 init_db()
