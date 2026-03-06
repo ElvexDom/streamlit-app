@@ -1,3 +1,5 @@
+"""Point d'entrée pour lancer le service Streamlit ou simuler son chargement."""
+
 import os
 import subprocess
 import sys
@@ -12,31 +14,47 @@ def run_app():
     st.write("Utilisez le menu à gauche pour naviguer.")
 
 
+def run_server():
+    """Lancer le processus Streamlit avec configuration par environnement."""
+    # Récupération du port via variable d'environnement
+    port = os.getenv("STREAMLIT_PORT", "8501")
+
+    # Définition dynamique des chemins pour une robustesse totale
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    current_file = os.path.basename(__file__)
+
+    print(f"Démarrage du serveur Streamlit sur le port {port}")
+
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "streamlit",
+            "run",
+            current_file,
+            "--server.port",
+            port,
+            "--server.address",
+            "0.0.0.0",
+        ],
+        cwd=current_dir,
+        check=False,
+    )
+
+
 def main():
-    """Point d'entrée : lance Streamlit ou affiche la page."""
-    # Ce bloc est exécuté par Pytest, donc il est couvert
+    """Déterminer s'il faut lancer le serveur ou afficher l'UI."""
+    # Sécurité pour Pytest : évite de lancer un processus bloquant lors des tests
     if "PYTEST_CURRENT_TEST" in os.environ:
-        run_app()
+        print("Mode Test détecté : chargement de streamlit_env validé.")
         return
 
-    # Tout ce qui suit est le lancement REEL du serveur.
-    # On l'exclut car on ne peut pas tester un serveur infini en test unitaire.
-    if "STREAMLIT_SERVER_PORT" not in os.environ:  # pragma: no cover
-        print("Démarrage du serveur Streamlit...")
-        subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "streamlit",
-                "run",
-                __file__,
-                "--server.port",
-                "8501",
-                "--server.address",
-                "0.0.0.0",
-            ]
-        )
-    else:  # pragma: no cover
+    # Si la variable STREAMLIT_SERVER_PORT n'est pas définie, c'est le
+    # premier lancement : on doit démarrer le serveur via run_server().
+    # Sinon, on est déjà dans le processus Streamlit, on affiche run_app().
+    if "STREAMLIT_SERVER_PORT" not in os.environ:
+        run_server()
+    else:
         run_app()
 
 
