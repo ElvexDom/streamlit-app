@@ -1,0 +1,50 @@
+name: toolbox
+
+services:
+  # --- BASE DE DONNÉES (PostgreSQL) ---
+  db:
+    image: postgres:16-alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-toolbox_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  # --- BACKEND (FastAPI) ---
+  api:
+    build: 
+      context: ./app/fastapi_env
+    container_name: fastapi-api
+    restart: always
+    depends_on:
+      - db
+    env_file:
+      - ./app/fastapi_env/.env
+    ports:
+      - "${FASTAPI_PORT}:8080"
+    environment:
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-toolbox_db}
+      - API_PORT=8080
+
+  # --- FRONTEND (Streamlit) ---
+  front:
+    build: 
+      context: ./app/streamlit_env
+    container_name: streamlit-front
+    restart: always
+    depends_on:
+      - api
+    env_file:
+      - ./app/streamlit_env/.env
+    ports:
+      - "${STREAMLIT_PORT}:8501"
+    environment:
+      - BACKEND_URL=http://api:8080
+
+volumes:
+  postgres_data:

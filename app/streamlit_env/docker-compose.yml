@@ -1,0 +1,15 @@
+name: streamlit
+
+services:
+  front:
+    build: .
+    container_name: streamlit-front
+    restart: always
+    env_file:
+      - .env    
+    ports:
+      # Mappe le port externe (ex: 8501) vers le port interne 8501
+      - "${STREAMLIT_PORT}:8501"
+    environment:
+      STREAMLIT_PORT: "${STREAMLIT_PORT}"
+      BACKEND_URL: "${BACKEND_URL}"
