@@ -46,3 +46,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/toolbox-front:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/toolbox-front:${{ github.sha }}
+            
