@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
 
-# Permissions globales nécessaires pour GitHub Pages et le Coverage
+# Permissions globales nécessaires pour GitHub Pages, le Coverage et le Scan
 permissions:
   contents: write
   pages: write
@@ -14,7 +14,23 @@ permissions:
   pull-requests: write
 
 jobs:
+  # --- JOB DE SÉCURITÉ (Vérification des secrets) ---
+  scan-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks Scan
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # --- JOB DE TESTS ET LINT ---
   test-and-lint:
+    needs: scan-secrets
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -53,8 +69,6 @@ jobs:
           path: python-coverage-comment-action.txt
 
       # --- RÉPARATION DES PERMISSIONS ---
-      # L'action de coverage s'exécute en Docker et peut verrouiller les dossiers. 
-      # On redonne la propriété au runner avant Sphinx.
       - name: Fix permissions
         run: sudo chown -R $USER:$USER .
 
@@ -69,7 +83,6 @@ jobs:
           path: docs/build/html
 
   deploy-docs:
-    # Ce job ne s'exécute que sur 'main' et seulement si 'test-and-lint' a réussi
     if: github.ref == 'refs/heads/main'
     needs: test-and-lint
     runs-on: ubuntu-latest
