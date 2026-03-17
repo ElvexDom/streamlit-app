@@ -3,10 +3,9 @@ import os
 import requests
 import streamlit as st
 
-API_PROTO = os.getenv("FASTAPI_PROTO", "http")
-API_HOST = os.getenv("FASTAPI_HOST", "localhost")
 API_PORT = os.getenv("FASTAPI_PORT", "8000")
-API_URL = f"{API_PROTO}://{API_HOST}:{API_PORT}/data"
+BACKEND_URL = os.getenv("BACKEND_URL", f"http://localhost:{API_PORT}")
+API_URL = f"{BACKEND_URL}/data"
 
 st.title("Affichage des données")
 
