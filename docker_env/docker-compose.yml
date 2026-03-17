@@ -12,6 +12,8 @@ services:
       POSTGRES_DB: ${DB_NAME:-toolbox_db}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - toolbox-net
 
   # --- BACKEND (FastAPI) ---
   api:
@@ -21,8 +23,10 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-toolbox_db}
-      - API_PORT=8000
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-password}@db:5432/${DB_NAME:-toolbox_db}
+      FASTAPI_PORT: "${FASTAPI_PORT:-8000}"
+    networks:
+      - toolbox-net
 
   # --- FRONTEND (Streamlit) ---
   front:
@@ -32,9 +36,14 @@ services:
     depends_on:
       - api
     environment:
-      - BACKEND_URL=http://api:8000
+      BACKEND_URL: http://api:8000
     ports:
-      - "${STREAMLIT_PORT}:8501"
+      - "${STREAMLIT_PORT:-8501}:8501"
+    networks:
+      - toolbox-net
 
 volumes:
   postgres_data:
+
+networks:
+  toolbox-net:
