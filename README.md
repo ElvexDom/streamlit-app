@@ -18,10 +18,10 @@
 | app/fastapi\_env/modules/crud.py         |       11 |        0 |     100% |           |
 | app/streamlit\_env/\_\_init\_\_.py       |        0 |        0 |     100% |           |
 | app/streamlit\_env/\_\_main\_\_.py       |       22 |        0 |     100% |           |
-| app/streamlit\_env/pages/0\_insert.py    |       23 |        0 |     100% |           |
-| app/streamlit\_env/pages/1\_Affichage.py |       16 |        0 |     100% |           |
+| app/streamlit\_env/pages/0\_insert.py    |       22 |        0 |     100% |           |
+| app/streamlit\_env/pages/1\_Affichage.py |       15 |        0 |     100% |           |
 | app/streamlit\_env/pages/\_\_init\_\_.py |        0 |        0 |     100% |           |
-| **TOTAL**                                |  **170** |    **0** | **100%** |           |
+| **TOTAL**                                |  **168** |    **0** | **100%** |           |
 
 
 ## Setup coverage badge
