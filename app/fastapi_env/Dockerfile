@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8080
 
 # 7. Lancement de l'API
-CMD ["uvicorn", "monapi:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python", "__main__.py"]

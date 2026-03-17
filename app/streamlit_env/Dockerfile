@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8501
 
 # Lancement de Streamlit
-CMD ["uv", "run", "streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]
+CMD ["python", "__main__.py"]
