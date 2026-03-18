@@ -7,3 +7,13 @@ Cette section liste les tests automatisés qui garantissent la qualité du proje
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: tests.test_fastapi
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+.. automodule:: tests.test_streamlit
+   :members:
+   :undoc-members:
+   :show-inheritance:
