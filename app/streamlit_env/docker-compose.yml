@@ -11,4 +11,3 @@ services:
       - "${STREAMLIT_PORT}:8501"
     environment:
       STREAMLIT_PORT: "${STREAMLIT_PORT}"
-      BACKEND_URL: "${BACKEND_URL}"
