@@ -10,3 +10,8 @@ Modules de l'application
    :members:
    :undoc-members:
    :show-inheritance:
+
+.. automodule:: app.streamlit_env.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
