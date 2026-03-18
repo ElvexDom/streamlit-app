@@ -4,6 +4,15 @@
 ![Coverage](https://raw.githubusercontent.com/ElvexDom/streamlit-app/coverage-data/badge.svg)
 ![License](https://img.shields.io/github/license/ElvexDom/streamlit-app)
 
+## Installation
+
+Pour commencer, clonez le dépôt sur votre machine locale :
+
+```bash
+git clone https://github.com/ElvexDom/streamlit-app.git
+cd streamlit-app
+```
+
 ## Description
 
 Ce dépôt présente un **exemple d'architecture applicative conteneurisée** mettant en œuvre plusieurs bonnes pratiques modernes de développement logiciel :
