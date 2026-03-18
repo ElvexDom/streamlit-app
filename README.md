@@ -4,6 +4,15 @@
 ![Coverage](https://raw.githubusercontent.com/ElvexDom/streamlit-app/coverage-data/badge.svg)
 ![License](https://img.shields.io/github/license/ElvexDom/streamlit-app)
 
+## Installation
+
+Pour commencer, clonez le dépôt sur votre machine locale :
+
+```bash
+git clone https://github.com/ElvexDom/streamlit-app.git
+cd streamlit-app
+```
+
 ## Description
 
 Ce dépôt présente un **exemple d'architecture applicative conteneurisée** mettant en œuvre plusieurs bonnes pratiques modernes de développement logiciel :
@@ -97,8 +106,9 @@ Structure typique du dépôt :
 ├── tests/
 │   ├── test_api.py
 │   └── test_modules.py
-├── docker-compose.yml
-├── docker-compose.prod.yml
+├── docker_env/
+│   ├── docker-compose.yml
+│   └── .env
 ├── .env.example
 ├── .gitignore
 └── .dockerignore
@@ -163,20 +173,18 @@ API_URL=
 
 ## Orchestration avec Docker Compose
 
-L'application peut être exécutée via Docker Compose pour démarrer tous les services simultanément.
+L'application peut être exécutée via Docker Compose pour démarrer tous les services simultanément. Les fichiers de configuration de Docker se situent dans le répertoire `docker_env`.
 
 Exemple simplifié :
 
 ```yaml
 services:
-  frontend:
-    build: ./app_front
-    ports:
-      - "8501:8501"
+  db:
+    image: postgres:16-alpine
   api:
-    build: ./app_api
-  database:
-    image: postgres
+    image: 3lv3x/toolbox-api
+  front:
+    image: 3lv3x/toolbox-front
 ```
 
 ### Persistance des données
@@ -264,8 +272,16 @@ services:
 
 ### Lancer l'application
 
+Déplacez-vous dans le dossier `docker_env` avant de lancer la commande :
+
 ```bash
-docker compose up
+cd docker_env
+docker compose up -d
+```
+
+Alternativement, depuis la racine du projet :
+```bash
+docker compose -f docker_env/docker-compose.yml up -d
 ```
 
 ### Lancer les tests
